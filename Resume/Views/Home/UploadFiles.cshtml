@@ -1,0 +1,41 @@
+﻿<h1>Post File to Controller</h1>
+<div class="clear"><br /></div>
+<form method="post" enctype="multipart/form-data">
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file" />
+    <input type="submit" id="submitbtn" />
+</form>
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#submitbtn').click(function () {
+            var data = new FormData();
+            var files = $("#file").get(0).files;
+
+            if (files.length > 0) { data.append("HelpSectionImages", files[0]); }
+            else {
+                common.showNotification('warning', 'Please select file to upload.', 'top', 'right');
+                return false;
+            }
+            var extension = $("#file").val().split('.').pop().toUpperCase();
+            if (extension != "PNG" && extension != "JPG" && extension != "GIF" && extension != "JPEG") {
+                common.showNotification('warning', 'Imvalid image file format.', 'top', 'right');
+                return false;
+            }
+            $.ajax({
+                url: '../home/SaveProfileImage', type: "POST", processData: false,
+                data: data, dataType: 'json',
+                contentType: false,
+                success: function (response) {
+                    if (response != null || response != '')
+                        alert(response);
+                    $("#file").val('');
+                },
+                error: function (er) { }
+
+            });
+            return false;
+        });
+
+    });
+</script>

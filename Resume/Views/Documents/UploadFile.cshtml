@@ -1,0 +1,44 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <title>Upload</title>
+</head>
+<script>
+    window.onload = function () {
+        document.getElementById('uploader').onsubmit = function () {
+            var formdata = new FormData(); //FormData object
+            var fileInput = document.getElementById('fileInput');
+            //Iterating through each files selected in fileInput
+            for (i = 0; i < fileInput.files.length; i++) {
+                //Appending each file to FormData object
+                formdata.append(fileInput.files[i].name, fileInput.files[i]);
+            }
+            //Creating an XMLHttpRequest and sending
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/Documents/UploadFile');
+            xhr.send(formdata);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    alert(xhr.responseText);
+                }
+            }
+            return false;
+        }
+    }
+</script>
+<body>
+    <form id="uploader">
+        <input id="fileInput" type="file" multiple>
+        <input type="submit" value="Upload file" />
+    </form>
+</body>
+</html>
